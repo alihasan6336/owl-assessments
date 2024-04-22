@@ -1,0 +1,5 @@
+/* Move label up when input has content */
+.form-outline label.form-label.active {
+    transform: translateY(-1.5rem) scale(0.8);
+    color: #495057;
+  }
