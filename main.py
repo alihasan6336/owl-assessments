@@ -6,4 +6,4 @@ try:
     with app.app_context():
         db.create_all()
 except Exception as e:
-    logging.exception("Failed to create tables")
+    logging.exception("Failed to create tables") 
