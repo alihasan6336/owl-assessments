@@ -1,0 +1,24 @@
+/* Move label up when input has content */
+.form-outline label.form-label.active {
+    transform: translateY(-1.5rem) scale(0.8);
+    color: #495057;
+}
+
+.label-color-fixed {
+  color: rgb(117, 117, 117);
+}
+
+/* Removing the up and down arrows */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+span {
+  color: rgb(220, 76, 100)
+}
