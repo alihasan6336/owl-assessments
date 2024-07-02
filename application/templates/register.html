@@ -19,7 +19,7 @@
   </head>
   <body>
 
-      <section class="vh-100" style="margin-bottom: 200px;">
+      <section class="vh-100 wrapper">
         <div class="container-fluid h-custom">
           <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-md-9 col-lg-6 col-xl-5">
@@ -185,11 +185,13 @@
                     </div>
                   </div>
                 </div>
-
-                <div class="form-outline mb-2">
-                  {{ form.address_2(class="form-control form-control-lg") }}
-                  <label class="form-label" for="form3Example3">{{ form.address_2.label }}</label>
+                <div class="row">
+                  <div class="form-outline mb-2">
+                    {{ form.address_2(class="form-control form-control-lg") }}
+                    <label class="form-label" for="form3Example3">{{ form.address_2.label }}</label>
+                  </div>
                 </div>
+                
 
                 <div class="text-center text-lg-start mt-4 pt-2">
                   {{ form.submit(class="btn btn-primary btn-lg", style="padding-left: 2.5rem; padding-right: 2.5rem;") }}
