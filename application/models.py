@@ -10,10 +10,10 @@ class Companies(db.Model):
     id                = db.Column(db.Integer(), primary_key=True) # Autoincrement works?, How to make it unsigned?
     first_name        = db.Column(db.String(35), nullable=False)
     last_name         = db.Column(db.String(35))
-    work_email        = db.Column(db.String(62), nullable=False) # Unique?
+    work_email        = db.Column(db.String(62), nullable=False, unique=True)
     department        = db.Column(db.String(50)) # Correct the length? Noted.
     phone_number      = db.Column(db.String(15), nullable=False, unique=True)
-    country_code      = db.Column(db.String(5), nullable=False)
+    country_code      = db.Column(db.String(6), nullable=False) # Max in my counryCodes is 6. Noted.
     gender            = db.Column(db.String(1))
     date_of_birth     = db.Column(db.Date())
     company_name      = db.Column(db.String(100), nullable=False) # Correct the length? Noted.

@@ -15,6 +15,17 @@
   </head>
     
   <body >
+
+    {% with errors = get_flashed_messages(with_categories=true) %}
+      {% if errors %}
+          {% for category, message in errors %}
+          <div class="alert alert-{{ category }}" role="alert">
+            {{ message }}
+          </div>
+          {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     <table class="table table-striped">
       <tr>
         <th>First Name</th>

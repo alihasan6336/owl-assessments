@@ -14,6 +14,7 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     form = RegisterForm()
+
     if request.method == "POST":
         if form.validate_on_submit():
             
@@ -45,7 +46,7 @@ def register():
                 flash(f"An error occurred while registering: {str(e)}", "danger")
                 return redirect("/register") # Or url_for? 
 
-            flash("You have successfully registered", "success")
+            flash("You have successfully registered!", "success")
             return redirect("/register")
             # return {"form": form.data}, 200
         else:
@@ -67,7 +68,10 @@ def register():
 
 @app.route("/dashboard_test")
 def dashboard_test():
-    companies = get_all_companies()
-
+    try:
+        companies = get_all_companies()
+    except Exception as e:
+        flash(f"An error occurred while fetching data: {str(e)}", "danger")
+        return render_template("dashboard_test.html")
     return render_template("dashboard_test.html", companies=companies)
     # return {"companies": [company.to_dict() for company in companies]}, 200
