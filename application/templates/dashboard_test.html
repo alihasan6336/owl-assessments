@@ -16,9 +16,9 @@
     
   <body >
 
-    {% with errors = get_flashed_messages(with_categories=true) %}
-      {% if errors %}
-          {% for category, message in errors %}
+    {% with alerts = get_flashed_messages(with_categories=true) %}
+      {% if alerts %}
+          {% for category, message in alerts %}
           <div class="alert alert-{{ category }}" role="alert">
             {{ message }}
           </div>
