@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -12,65 +12,105 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
     <!-- MDB -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.css" rel="stylesheet"/>    
-  </head>
-    
-  <body >
+    <!-- Custom CSS -->
+    <link type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+</head>
+<body>
 
-    {% with alerts = get_flashed_messages(with_categories=true) %}
-      {% if alerts %}
-          {% for category, message in alerts %}
-          <div class="alert alert-{{ category }}" role="alert">
-            {{ message }}
-          </div>
-          {% endfor %}
-      {% endif %}
-    {% endwith %}
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar bg-light p-4">
+            <h2>Welcome, <b>{{ user.first_name }}</b></h2>
+            <ul class="flex-column">
+              <li class="nav-item {% if request.path == '/home' %}active{% endif %}">
+                  <a class="nav-link" href="/home">Home</a>
+              </li>
+              <li class="nav-item {% if request.path == '/dashboard-test' %}active{% endif %}">
+                  <a class="nav-link" href="/dashboard-test">Dashboard</a>
+              </li>
+              <li class="nav-item {% if request.path == '/register' %}active{% endif %}">
+                  <a class="nav-link" href="/register">Register</a>
+              </li>
+              <li class="nav-item {% if request.path == '/login' %}active{% endif %}">
+                  <a class="nav-link" href="/login">Login</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="/logout">Logout</a>
+              </li>
+          </ul>
+        </div>
 
-    <table class="table table-striped">
-      <tr>
-        <th>First Name</th>
-        <th>last Name</th>
-        <th>Work Email</th>
-        <th>Department</th>
-        <th>Country Code</th>
-        <th>Date of Birth</th>
-        <th>Company Name</th>
-        <th>Phone Number</th>
-        <th>Country</th>
-        <th>State</th>
-        <th>City</th>
-        <th>Postal Code</th>
-        <th>Street Address</th>
-        <th>Building</th>
-        <th>Floor</th>
-        <th>Apartment</th>
-        <th>Address 2</th>
-        <th>Registration Date</th>
-      </tr>
-      <tbody>
-        {% for company in companies %}
-          <tr>
-            <td>{{ company.first_name }}</td>
-            <td>{{ company.last_name }}</td>
-            <td>{{ company.work_email }}</td>
-            <td>{{ company.department }}</td>
-            <td>{{ company.country_code }}</td>
-            <td>{{ company.date_of_birth }}</td>
-            <td>{{ company.company_name }}</td>
-            <td>{{ company.phone_number }}</td>
-            <td>{{ company.country }}</td>
-            <td>{{ company.state }}</td>
-            <td>{{ company.city }}</td>
-            <td>{{ company.postal_code }}</td>
-            <td>{{ company.street_address }}</td>
-            <td>{{ company.building }}</td>
-            <td>{{ company.floor }}</td>
-            <td>{{ company.apartment }}</td>
-            <td>{{ company.address_2 }}</td>
-            <td>{{ company.registration_date }}</td>
-          </tr>
-        {% endfor %}                        
-      </tbody>
-    </table>        
-  </body>
+        <!-- Main Content -->
+        <div class="content p-4">
+            <div class="container">
+                {% with alerts = get_flashed_messages(with_categories=true) %}
+                    {% if alerts %}
+                        {% for category, message in alerts %}
+                            <div class="alert alert-{{ category }}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>All Companies Information</h3>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Work Email</th>
+                                    <th>Department</th>
+                                    <th>Country Code</th>
+                                    <th>Date of Birth</th>
+                                    <th>Company Name</th>
+                                    <th>Phone Number</th>
+                                    <th>Country</th>
+                                    <th>State</th>
+                                    <th>City</th>
+                                    <th>Postal Code</th>
+                                    <th>Street Address</th>
+                                    <th>Building</th>
+                                    <th>Floor</th>
+                                    <th>Apartment</th>
+                                    <th>Address 2</th>
+                                    <th>Registration Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for company in companies %}
+                                    <tr>
+                                        <td>{{ company.first_name }}</td>
+                                        <td>{{ company.last_name }}</td>
+                                        <td>{{ company.work_email }}</td>
+                                        <td>{{ company.department }}</td>
+                                        <td>{{ company.country_code }}</td>
+                                        <td>{{ company.date_of_birth }}</td>
+                                        <td>{{ company.company_name }}</td>
+                                        <td>{{ company.phone_number }}</td>
+                                        <td>{{ company.country }}</td>
+                                        <td>{{ company.state }}</td>
+                                        <td>{{ company.city }}</td>
+                                        <td>{{ company.postal_code }}</td>
+                                        <td>{{ company.street_address }}</td>
+                                        <td>{{ company.building }}</td>
+                                        <td>{{ company.floor }}</td>
+                                        <td>{{ company.apartment }}</td>
+                                        <td>{{ company.address_2 }}</td>
+                                        <td>{{ company.registration_date }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
 </html>

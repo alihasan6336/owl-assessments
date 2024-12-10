@@ -25,7 +25,7 @@ def login():
                 login_user(user)
                 flash('Logged in successfully.', 'success')
                 next_page = request.args.get('next')
-                return redirect(next_page) if next_page else redirect(url_for('dashboard_test'))
+                return redirect(next_page) if next_page else redirect(url_for('home'))
             else :
                 flash('Login unsuccessful. Please check your <b>Work Email</b> and <b>Password</b>', 'danger')
                 return redirect(url_for('login'))
@@ -86,6 +86,14 @@ def logout():
     return redirect(url_for('login'))
 
 
+@app.route("/home")
+@login_required
+def home():
+    user = Company.query.filter_by(id=session["_user_id"]).first()
+
+    return render_template("home.html", user=user)
+
+
 @app.route("/dashboard-test")
 @login_required
 def dashboard_test():
@@ -94,7 +102,9 @@ def dashboard_test():
     except Exception as e:
         flash(f"An error occurred while fetching data: {str(e)}", "danger")
         return render_template("dashboard_test.html")
-    return render_template("dashboard_test.html", companies=companies)
+    
+    user = Company.query.filter_by(id=session["_user_id"]).first()
+    return render_template("dashboard_test.html", companies=companies, user=user)
 
 @app.route("/test-making", methods=["GET", "POST"])
 @login_required
@@ -114,7 +124,7 @@ def test_making():
         
         new_test = Test(
             company_id = user.id,
-            name = test_form.name.data,
+            title = test_form.title.data,
             duration = test_form.duration.data,
             instructions = test_form.instructions.data,
             category = test_form.category.data,

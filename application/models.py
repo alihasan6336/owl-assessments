@@ -56,7 +56,7 @@ class Test(db.Model):
     
     id = db.Column(db.BigInteger, primary_key=True)
     company_id = db.Column(db.BigInteger, db.ForeignKey('companies.id'), nullable=False)
-    name = db.Column(db.String(255), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
     duration = db.Column(db.SmallInteger)
     instructions = db.Column(db.Text)
     category = db.Column(db.String(255))

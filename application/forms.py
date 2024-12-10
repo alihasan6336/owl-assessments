@@ -42,7 +42,7 @@ class LoginForm(FlaskForm):
 
 class TestForm(FlaskForm):
 
-    name = StringField('Test Name', validators=[DataRequired(), Length(max=100)])
+    title = StringField('Test Title', validators=[DataRequired(), Length(max=100)])
     duration = IntegerField('Duration (minutes)', validators=[NumberRange(min=1, max=600)], default=60)
     instructions = TextAreaField('Instructions', validators=[Length(max=255)])
     category = SelectField('Test Category', choices=category_choices, validators=[DataRequired()])
