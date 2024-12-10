@@ -1,5 +1,5 @@
 from wtforms import ValidationError
-from application.models import Companies
+from application.models import Company
 
 
 class NumericFieldValidator(object):
@@ -22,8 +22,8 @@ class UniqueFieldValidator(object):
     def __call__(self, form, field):
         
         field_map = {
-            "phone_number": Companies.query.filter_by(phone_number=field.data).first(),
-            "work_email": Companies.query.filter_by(work_email=field.data).first()
+            "phone_number": Company.query.filter_by(phone_number=field.data).first(),
+            "work_email": Company.query.filter_by(work_email=field.data).first()
         }
 
         existing_record = field_map.get(field.name)

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Test</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.css" rel="stylesheet"/>    
+
+    <link type="text/css" href=" {{ url_for('static', filename='css/test-making.css') }}" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Hi <b>{{ user.first_name }}</b></h2>
+        
+        <h3>Quick Links</h3>
+        <ul>
+            <li><a href="/dashboard-test">Dashboard</a></li>
+            <li><a href="/register">View Tests</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <h1>Create a New Test</h1>
+
+        {% with alerts = get_flashed_messages(with_categories=true) %}
+            {% if alerts %}
+                {% for category, message in alerts %}
+                <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="container mt-5">
+
+            <form method="POST" action="">
+                {{ test_form.hidden_tag() }}
+                
+                <div class="form-group">
+                    {{ test_form.name.label(class="form-label") }}
+                    {{ test_form.name(class="form-control") }}
+                    {% if test_form.name.errors %}
+                        <div class="text-danger">
+                            {% for error in test_form.name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            
+                <div class="form-group">
+                    {{ test_form.duration.label(class="form-label") }}
+                    {{ test_form.duration(class="form-control") }}
+                    {% if test_form.duration.errors %}
+                        <div class="text-danger">
+                            {% for error in test_form.duration.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Test Instructions -->
+                <div class="form-group">
+                    {{ test_form.instructions.label(class="form-label") }}
+                    {{ test_form.instructions(class="form-control") }}
+                    {% if test_form.instructions.errors %}
+                        <div class="text-danger">
+                            {% for error in test_form.instructions.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Test category -->
+                <div class="form-group">
+                    {{ test_form.category.label(class="form-label") }}
+                    <select id="test-category" name="{{ test_form.category.name }}" class="form-control">
+                        {% for value, label in test_form.category.choices %}
+                            <option value="{{ value }}" {% if value == '' %}disabled selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                    {% if test_form.category.errors %}
+                        <div class="text-danger">
+                            {% for error in test_form.category.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}     
+                </div>
+
+                <!-- Number of Questions -->
+                <div class="form-group">
+                    {{ test_form.num_of_questions.label(class="form-label") }}
+                    {{ test_form.num_of_questions(class="form-control") }}
+                    {% if test_form.num_of_questions.errors %}
+                        <div class="text-danger">
+                            {% for error in test_form.num_of_questions.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ test_form.total_marks.label(class="form-label") }}
+                    {{ test_form.total_marks(class="form-control") }}
+                    {% if test_form.total_marks.errors %}
+                        <div class="text-danger">
+                            {% for error in test_form.total_marks.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Question Type Selection -->
+                <section id="create-question-container" class="question-section">
+
+                    <div class="form-group">
+                        <!-- <label for="mcq-question"><b>MCQ Question:</b></label>
+                        <input type="text" id="mcq-question" name="mcq_question" placeholder="Enter MCQ question"> -->
+
+                        <b>{{ question_form.question.label(class="form-label") }}</b>
+                        {{ question_form.question(class="form-control", id="") }}
+                        {% if question_form.question.errors %}
+                            <div class="text-danger">
+                                {% for error in question_form.question.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ question_form.type.label(class="form-label") }}
+                        <select id="question-type" name="{{ question_form.type.name }}" class="form-control">
+                            {% for value, label in question_form.type.choices %}
+                                <option value="{{ value }}" {% if value == '' %}disabled selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        {% if question_form.type.errors %}
+                            <div class="text-danger">
+                                {% for error in question_form.type.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ question_form.marks.label(class="form-label")}}
+                        {{ question_form.marks(class="form-control") }}
+                        {% if question_form.marks.errors %}
+                            <div class="text-danger">
+                                {% for error in question_form.marks.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- MCQ Section -->
+                    <div id="mcq-section" style="display:none;">
+                        
+                        <div id="mcq-options">
+                            <div id="option-template-1" class="form-group" >
+                                {{ option_form.option.label(class="form-label", for="option-1") }}
+                                {{ option_form.option(class="form-control", id="option-1") }}
+                                {% if option_form.option.errors %}
+                                    <div class="text-danger">
+                                        {% for error in option_form.option.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                <div class="form-check">
+                                    {{ option_form.is_correct.label(class="form-check-label", for="is-correct-1") }}
+                                    {{ option_form.is_correct(class="form-control", id="is-correct-1") }}
+                                </div>
+                            </div>
+
+                            
+
+                        </div>
+
+                        <!-- Buttons to add/remove options -->
+                        <div class="form-group">
+                            <button type="button" class="btn" onclick="addOption()">Add Option</button>
+                            <button type="button" class="btn btn-remove" onclick="removeOption()">Remove Option</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Create Question</button>
+                </section>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/test-making.js') }}" defer></script>
+
+
+</body>
+</html>

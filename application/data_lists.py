@@ -245,3 +245,20 @@ counryCodes = [
     ('+260', 'Zambia (+260) 🇿🇲'),
     ('+263', 'Zimbabwe (+263) 🇿🇼')
 ]
+
+category_choices = [
+    ('', 'Select category'), 
+    ('math', 'Math'),
+    ('science', 'Science'),
+    ('english', 'English'),
+    ('history', 'History'),
+    ('geography', 'Geography'),
+    ('programming', 'Programming'),
+    ('other', 'Other')
+]
+
+question_types = [
+    ('', 'Select question type'), 
+    ('mcq', 'MCQ'), 
+    ('esa', 'Essay')
+]
