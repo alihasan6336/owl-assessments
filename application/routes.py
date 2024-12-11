@@ -224,6 +224,14 @@ def test_making():
     else:
         return render_template("test_making.html", user=user, test_form=test_form, question_form=question_form, option_form=option_form)
 
+@app.route("/tests", methods=["GET"])
+@login_required
+def list_tests():
+    user = get_current_user()
+    tests = Test.query.filter_by(company_id=user.id).all()
+    return render_template("list_tests.html", user=user, tests=tests)
+
+
 @app.route("/test-db-connection")
 def test_db_connection():
     try:

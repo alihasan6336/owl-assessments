@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>List of Tests</title>
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.css" rel="stylesheet"/>    
+    <!-- Custom CSS -->
+    <link type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+</head>
+<body>
+
+    <div class="d-flex">
+        {% include 'includes/left_side_bar.html' %}
+        <!-- Main Content -->
+        <div class="content p-4">
+            <div class="container">
+                {% with alerts = get_flashed_messages(with_categories=true) %}
+                    {% if alerts %}
+                        {% for category, message in alerts %}
+                            <div class="alert alert-{{ category }}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>List of Tests</h2>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Duration</th>
+                                    <th>Description</th>
+                                    <th>Instructions</th>
+                                    <th>Type</th>
+                                    <th>Number of Questions</th>
+                                    <th>Total Marks</th>
+                                    <th>Creation Date</th>
+                                    <th>Expiry Date</th>
+                                    <th>Multiple Sections</th>
+                                    <th>One Section Per Page</th>
+                                    <th>Correction Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for test in tests %}
+                                <tr>
+                                    <td>{{ test.title }}</td>
+                                    <td>{{ test.duration }}</td>
+                                    <td>{{ test.description }}</td>
+                                    <td>{{ test.instructions }}</td>
+                                    <td>{{ test.type }}</td>
+                                    <td>{{ test.num_of_questions }}</td>
+                                    <td>{{ test.total_marks }}</td>
+                                    <td>{{ test.creation_date }}</td>
+                                    <td>{{ test.expiry_date }}</td>
+                                    <td>{{ 'Yes' if test.multiple_sections else 'No' }}</td>
+                                    <td>{{ 'Yes' if test.one_section_per_page else 'No' }}</td>
+                                    <td>
+                                        {% if test.correction_type == 'a' %}
+                                            Auto
+                                        {% elif test.correction_type == 'm' %}
+                                            Manual
+                                        {% elif test.correction_type == 'c' %}
+                                            Custom
+                                        {% else %}
+                                            Unknown
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
