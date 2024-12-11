@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, EmailField, DateField, PasswordField, SubmitField, SelectField, BooleanField, TextAreaField
+from wtforms import StringField, IntegerField, EmailField, DateField, PasswordField, SubmitField, SelectField, BooleanField, TextAreaField, DateTimeField, SelectMultipleField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional, Regexp, NumberRange
-from application.form_custom_validator import NumericFieldValidator, UniqueFieldValidator
+from application.form_custom_validator import NumericFieldValidator, UniqueFieldValidator, ExpiryDateValidator
 from datetime import date
-from application.data_lists import counryCodes, category_choices, question_types
+from application.data_lists import counryCodes, test_types_ls, question_types
 
 # Define constants for the password validation
 PASSWORD_REGEX = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!*?])[A-Za-z\d@#$%^&+=!*?]{8,30}$'
@@ -44,10 +44,16 @@ class TestForm(FlaskForm):
 
     title = StringField('Test Title', validators=[DataRequired(), Length(max=100)])
     duration = IntegerField('Duration (minutes)', validators=[NumberRange(min=1, max=600)], default=60)
+    description = TextAreaField('Description', validators=[Length(max=255)])
     instructions = TextAreaField('Instructions', validators=[Length(max=255)])
-    category = SelectField('Test Category', choices=category_choices, validators=[DataRequired()])
+    ctype = SelectField('Test type', choices=test_types_ls, validators=[Length(max=100)])
+    other_type = StringField('Specify your type:', validators=[Length(max=100)])
     num_of_questions = IntegerField('Number of Questions', validators=[DataRequired(), NumberRange(min=1, max=100)])
     total_marks = IntegerField('Total Marks', validators=[DataRequired(), NumberRange(min=1, max=1000)])
+    expiry_date = DateTimeField('Expiry Date', format='%Y-%m-%d %H:%M:%S', validators=[Optional(), ExpiryDateValidator()], render_kw={"placeholder": "YYYY-MM-DD HH:MM:SS"})
+    multiple_sections = BooleanField('Do you want to have more than one section in the test?')
+    one_section_per_page = BooleanField('Do you want to present every section in one page?')
+    correction_type = SelectField('Correction Type', choices=[('a', 'Automatic'), ('m', 'Manual'), ('c', 'Custom')], validators=[DataRequired()])
     submit = SubmitField('Create Test')
 
 
@@ -59,6 +65,6 @@ class QuestionForm(FlaskForm):
 
 
 class OptionForm(FlaskForm):
-    option = TextAreaField('Option 1', validators=[DataRequired(), Length(max=255)])
-    is_correct = SelectField('Is Correct', choices=[('y', 'Yes'), ('n', 'No')]) # can this be changed by the user?
+    option = TextAreaField('Option 1', validators=[Length(max=255)]) #add required
+    is_correct = SelectField('Is Correct', choices=[('y', 'Yes'), ('n', 'No')]) # can this be changed by the user? needs DataRequired?
     submit = SubmitField('Add Option')

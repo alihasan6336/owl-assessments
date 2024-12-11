@@ -6,15 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (questionTypeSelect) {
         questionTypeSelect.addEventListener('change', toggleQuestionType);
     }
-
-    // Ensure the initial display state is correct // here
     toggleQuestionType();
-
-    // // Add event listener for form submission // here
-    // const form = document.querySelector("form");
-    // if (form) {
-    //     form.addEventListener('submit', getCorrectMCQOption);
-    // }
 });
 
 function toggleQuestionType() {
@@ -69,3 +61,22 @@ function removeOption() {
     }
 }
 
+
+function toggleOtherTypeInput() {
+    var testTypeSelect = document.getElementById('test-type');
+    var otherTypeGroup = document.getElementById('other-type-group');
+    if (testTypeSelect.value === 'other') {
+        otherTypeGroup.style.display = 'block';
+    } else {
+        otherTypeGroup.style.display = 'none';
+    }
+}
+
+
+$(document).ready(function() {
+    $('#categories').select2({
+        tags: true,
+        tokenSeparators: [',', ' '],
+        width: '100%'  // Ensure the select2 input takes the full width
+    });
+});

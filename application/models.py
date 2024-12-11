@@ -58,15 +58,20 @@ class Test(db.Model):
     company_id = db.Column(db.BigInteger, db.ForeignKey('companies.id'), nullable=False)
     title = db.Column(db.String(255), nullable=False)
     duration = db.Column(db.SmallInteger)
+    description = db.Column(db.Text)
     instructions = db.Column(db.Text)
-    category = db.Column(db.String(255))
+    type = db.Column(db.String(255))
     num_of_questions = db.Column(db.SmallInteger, nullable=False)
     total_marks = db.Column(db.SmallInteger, nullable=False)
+    expiry_date = db.Column(db.DateTime)
+    multiple_sections = db.Column(db.Boolean, default=False)
+    one_section_per_page = db.Column(db.Boolean, default=False)
+    correction_type = db.Column(db.String(3), default='a')
     active = db.Column(db.Boolean, default=True)
     creation_date = db.Column(db.DateTime, default=datetime.utcnow) # Test the datetime formate.
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) # Test the datetime formate.
 
-    # Relationships
+    # Relationships #here
     questions = db.relationship('Question', backref='test', cascade="all, delete-orphan")
 
     def to_dict(self):
@@ -83,7 +88,7 @@ class Question(db.Model):
     creation_date = db.Column(db.DateTime, default=datetime.utcnow) # Test the datetime formate.
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) # Test the datetime formate.
 
-    # Relationships
+    # Relationships #here
     options = db.relationship('Option', backref='question', cascade="all, delete-orphan")
 
     def to_dict(self):
@@ -99,6 +104,25 @@ class Option(db.Model):
     is_correct = db.Column(db.Boolean, nullable=False)
     creation_date = db.Column(db.DateTime, default=datetime.utcnow) # Test the datetime formate.
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) # Test the datetime formate.
+
+    # Relationships #here
+    # questions = db.relationship('Question', back_populates='test')
+    # options = db.relationship('Option', back_populates='test')
+
+    def to_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
+
+class TestCategory(db.Model):
+    __tablename__ = 'test_categories'
+    
+    id = db.Column(db.BigInteger, primary_key=True)
+    test_id = db.Column(db.BigInteger, db.ForeignKey('tests.id'), nullable=False)
+    name = db.Column(db.String(50), nullable=False) # make it unique? 
+    creation_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationships #here
+    # tests = db.relationship('Test', backref='category', cascade="all, delete-orphan")
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}

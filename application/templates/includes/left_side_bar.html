@@ -1,0 +1,20 @@
+<div class="sidebar p-4">
+    <h2>Welcome, <b>{{ user.first_name }}</b></h2>
+    <ul class="flex-column">
+        <li class="nav-item {% if request.path == '/home' %}active{% endif %}">
+            <a class="nav-link" href="/home">Home</a>
+        </li>
+        <li class="nav-item {% if request.path == '/dashboard-test' %}active{% endif %}">
+            <a class="nav-link" href="/dashboard-test">Dashboard</a>
+        </li>
+        <li class="nav-item {% if request.path == '/register' %}active{% endif %}">
+            <a class="nav-link" href="/register">Register</a>
+        </li>
+        <li class="nav-item {% if request.path == '/login' %}active{% endif %}">
+            <a class="nav-link" href="/login">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+        </li>
+    </ul>
+</div>

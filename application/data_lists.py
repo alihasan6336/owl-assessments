@@ -246,8 +246,8 @@ counryCodes = [
     ('+263', 'Zimbabwe (+263) 🇿🇼')
 ]
 
-category_choices = [
-    ('', 'Select category'), 
+test_types_ls = [
+    ('', 'Select type'), 
     ('math', 'Math'),
     ('science', 'Science'),
     ('english', 'English'),
