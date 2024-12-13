@@ -28,8 +28,8 @@ class Company(db.Model, UserMixin):
     apartment         = db.Column(db.String(10))
     address_2         = db.Column(db.String(255)) # Maxed at 100 in the validation. Noted.
     passhash          = db.Column(db.String(255))
-    registration_date = db.Column(db.DateTime, default=datetime.utcnow) # Defalte timezone? works?
-    active            = db.Column(db.Boolean, default=True)
+    registration_date = db.Column(db.DateTime, default=datetime.utcnow) # Default timezone? works? # Default not showing in the quick decomintation in DataGrip but works!
+    active            = db.Column(db.Boolean, default=True) # Default not showing in the quick decomintation in DataGrip but works!
 
     @property   
     def is_active(self):
@@ -61,15 +61,15 @@ class Test(db.Model):
     description = db.Column(db.Text)
     instructions = db.Column(db.Text)
     type = db.Column(db.String(255))
-    num_of_questions = db.Column(db.SmallInteger, nullable=False)
+    num_of_questions = db.Column(db.SmallInteger, nullable=False, server_default="0") # server_default="0" is not working.
     total_marks = db.Column(db.SmallInteger, nullable=False)
     expiry_date = db.Column(db.DateTime)
-    multiple_sections = db.Column(db.Boolean, default=False)
-    one_section_per_page = db.Column(db.Boolean, default=False)
-    correction_type = db.Column(db.String(3), default='a')
-    active = db.Column(db.Boolean, default=True)
-    creation_date = db.Column(db.DateTime, default=datetime.utcnow) # Test the datetime formate.
-    last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) # Test the datetime formate.
+    multiple_sections = db.Column(db.Boolean, default=False) # Default not showing in the quick decomintation in DataGrip but works!
+    one_section_per_page = db.Column(db.Boolean, default=False) # Default not showing in the quick decomintation in DataGrip but works!
+    correction_type = db.Column(db.String(10), server_default='a') # server_default='a' is not working.
+    active = db.Column(db.Boolean, default=True) # Default not showing in the quick decomintation in DataGrip but works!
+    creation_date = db.Column(db.DateTime, default=datetime.utcnow) # Test the datetime formate. # Default not showing in the quick decomintation in DataGrip but works!
+    last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) # Test the datetime formate. # Default not showing in the quick decomintation in DataGrip but works! # On update working?
 
     # Relationships #here
     questions = db.relationship('Question', backref='test', cascade="all, delete-orphan")
@@ -85,8 +85,8 @@ class Question(db.Model):
     question = db.Column(db.Text, nullable=False)
     type = db.Column(db.String(5), nullable=False)
     marks = db.Column(db.SmallInteger, nullable=False)
-    creation_date = db.Column(db.DateTime, default=datetime.utcnow) # Test the datetime formate.
-    last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) # Test the datetime formate.
+    creation_date = db.Column(db.DateTime, default=datetime.utcnow) # Test the datetime formate. # Default not showing in the quick decomintation in DataGrip but works!
+    last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) # Test the datetime formate. # Default not showing in the quick decomintation in DataGrip but works!
 
     # Relationships #here
     options = db.relationship('Option', backref='question', cascade="all, delete-orphan")
@@ -102,8 +102,8 @@ class Option(db.Model):
     test_id = db.Column(db.BigInteger, db.ForeignKey('tests.id'), nullable=False)
     option = db.Column(db.Text, nullable=False)
     is_correct = db.Column(db.Boolean, nullable=False)
-    creation_date = db.Column(db.DateTime, default=datetime.utcnow) # Test the datetime formate.
-    last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) # Test the datetime formate.
+    creation_date = db.Column(db.DateTime, default=datetime.utcnow) # Test the datetime formate. # Default not showing in the quick decomintation in DataGrip but works!
+    last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) # Test the datetime formate. # Default not showing in the quick decomintation in DataGrip but works!
 
     # Relationships #here
     # questions = db.relationship('Question', back_populates='test')
@@ -119,7 +119,7 @@ class TestCategory(db.Model):
     id = db.Column(db.BigInteger, primary_key=True)
     test_id = db.Column(db.BigInteger, db.ForeignKey('tests.id'), nullable=False)
     name = db.Column(db.String(50), nullable=False) # make it unique? 
-    creation_date = db.Column(db.DateTime, default=datetime.utcnow)
+    creation_date = db.Column(db.DateTime, default=datetime.utcnow) # Default not showing in the quick decomintation in DataGrip but works!
 
     # Relationships #here
     # tests = db.relationship('Test', backref='category', cascade="all, delete-orphan")

@@ -111,18 +111,7 @@
                     </select>
                 </div>
 
-                <!-- Number of Questions -->
-                <div class="form-group">
-                    {{ test_form.num_of_questions.label(class="form-label") }}
-                    {{ test_form.num_of_questions(class="form-control") }}
-                    {% if test_form.num_of_questions.errors %}
-                        <div class="text-danger">
-                            {% for error in test_form.num_of_questions.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
+                <!-- Total Marks -->
                 <div class="form-group">
                     {{ test_form.total_marks.label(class="form-label") }}
                     {{ test_form.total_marks(class="form-control") }}
@@ -186,72 +175,9 @@
                     {% endif %}
                 </div>
 
-                <!-- Question Type Selection -->
-                <section id="create-question-container" class="question-section">
-                    <div class="form-group">
-                        <b>{{ question_form.question.label(class="form-label") }}</b>
-                        {{ question_form.question(class="form-control", id="") }}
-                        {% if question_form.question.errors %}
-                            <div class="text-danger">
-                                {% for error in question_form.question.errors %}
-                                    <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="form-group">
-                        {{ question_form.type.label(class="form-label") }}
-                        <select id="question-type" name="{{ question_form.type.name }}" class="form-control">
-                            {% for value, label in question_form.type.choices %}
-                                <option value="{{ value }}" {% if value == '' %}disabled selected{% endif %}>{{ label }}</option>
-                            {% endfor %}
-                        </select>
-                        {% if question_form.type.errors %}
-                            <div class="text-danger">
-                                {% for error in question_form.type.errors %}
-                                    <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="form-group">
-                        {{ question_form.marks.label(class="form-label")}}
-                        {{ question_form.marks(class="form-control") }}
-                        {% if question_form.marks.errors %}
-                            <div class="text-danger">
-                                {% for error in question_form.marks.errors %}
-                                    <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <!-- MCQ Section -->
-                    <div id="mcq-section" style="display:none;">
-                        <div id="mcq-options">
-                            <div id="option-template-1" class="form-group" >
-                                {{ option_form.option.label(class="form-label", for="option-1") }}
-                                {{ option_form.option(class="form-control", id="option-1") }}
-                                {% if option_form.option.errors %}
-                                    <div class="text-danger">
-                                        {% for error in option_form.option.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                                <div class="form-check">
-                                    {{ option_form.is_correct.label(class="form-check-label", for="is-correct-1") }}
-                                    {{ option_form.is_correct(class="form-control", id="is-correct-1") }}
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Buttons to add/remove options -->
-                        <div class="form-group">
-                            <button type="button" class="btn" onclick="addOption()">Add Option</button>
-                            <button type="button" class="btn btn-remove" onclick="removeOption()">Remove Option</button>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">Create Question</button>
-                </section>
+                
+
+                <button type="submit" class="btn">Create Test</button>
             </form>
         </div>
     </div>

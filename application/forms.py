@@ -48,7 +48,6 @@ class TestForm(FlaskForm):
     instructions = TextAreaField('Instructions', validators=[Length(max=255)])
     ctype = SelectField('Test type', choices=test_types_ls, validators=[Length(max=100)])
     other_type = StringField('Specify your type:', validators=[Length(max=100)])
-    num_of_questions = IntegerField('Number of Questions', validators=[DataRequired(), NumberRange(min=1, max=100)])
     total_marks = IntegerField('Total Marks', validators=[DataRequired(), NumberRange(min=1, max=1000)])
     expiry_date = DateTimeField('Expiry Date', format='%Y-%m-%d %H:%M:%S', validators=[Optional(), ExpiryDateValidator()], render_kw={"placeholder": "YYYY-MM-DD HH:MM:SS"})
     multiple_sections = BooleanField('Do you want to have more than one section in the test?')
@@ -57,14 +56,14 @@ class TestForm(FlaskForm):
     submit = SubmitField('Create Test')
 
 
-class QuestionForm(FlaskForm):
-    question = TextAreaField('Question', validators=[DataRequired(), Length(max=255)])
-    type = SelectField('Question Type', choices=question_types, validators=[DataRequired()])
-    marks = IntegerField('Marks', validators=[DataRequired(), NumberRange(min=1, max=1000)])
-    submit = SubmitField('Add Question')
+# class QuestionForm(FlaskForm):
+#     question = TextAreaField('Question', validators=[DataRequired(), Length(max=255)])
+#     type = SelectField('Question Type', choices=question_types, validators=[DataRequired()])
+#     marks = IntegerField('Marks', validators=[DataRequired(), NumberRange(min=1, max=1000)])
+#     submit = SubmitField('Add Question')
 
 
-class OptionForm(FlaskForm):
-    option = TextAreaField('Option 1', validators=[Length(max=255)]) #add required
-    is_correct = SelectField('Is Correct', choices=[('y', 'Yes'), ('n', 'No')]) # can this be changed by the user? needs DataRequired?
-    submit = SubmitField('Add Option')
+# class OptionForm(FlaskForm):
+#     option = TextAreaField('Option 1', validators=[Length(max=255)]) #add required
+#     is_correct = SelectField('Is Correct', choices=[('y', 'Yes'), ('n', 'No')]) # can this be changed by the user? needs DataRequired?
+#     submit = SubmitField('Add Option')

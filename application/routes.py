@@ -2,8 +2,8 @@ from flask import render_template, request, flash, redirect, url_for, session, j
 from werkzeug.security import generate_password_hash
 from flask_login import login_user, login_required, logout_user
 from application import app, db, login_manager
-from application.models import Company, Test, Question, Option, TestCategory
-from application.forms import RegisterForm, LoginForm, TestForm, QuestionForm, OptionForm
+from application.models import Company, Test, TestCategory
+from application.forms import RegisterForm, LoginForm, TestForm
 from application.db_operations import insert_in_db, get_all_companies
 from sqlalchemy import text
 import logging
@@ -120,15 +120,15 @@ def test_making():
     user = get_current_user()
 
     test_form = TestForm()
-    question_form = QuestionForm()
-    option_form = OptionForm()
+    # question_form = QuestionForm()
+    # option_form = OptionForm()
 
     if request.method == "GET":
-        return render_template("test_making.html", user=user, test_form=test_form, question_form=question_form, option_form=option_form)
+        return render_template("test_making.html", user=user, test_form=test_form)
 
     elif request.method == "POST":
-        if not test_form.validate_on_submit() or not question_form.validate_on_submit() or not option_form.validate_on_submit():
-            return render_template("test_making.html", user=user, test_form=test_form, question_form=question_form, option_form=option_form)
+        if not test_form.validate_on_submit():
+            return render_template("test_making.html", user=user, test_form=test_form)
         
         new_test = Test(
             company_id=user.id,
@@ -137,7 +137,6 @@ def test_making():
             description=test_form.description.data,
             instructions=test_form.instructions.data,
             type=test_form.ctype.data,
-            num_of_questions=test_form.num_of_questions.data,
             total_marks=test_form.total_marks.data,
             expiry_date=test_form.expiry_date.data,
             multiple_sections=test_form.multiple_sections.data,
@@ -165,13 +164,13 @@ def test_making():
             category = category.strip()
             if not category:
                 flash("Category cannot be empty.", "danger")
-                return render_template("test_making.html", user=user, test_form=test_form, question_form=question_form, option_form=option_form)
+                return render_template("test_making.html", user=user, test_form=test_form)
             if len(category) > 50:
                 flash("Category cannot be longer than 50 characters.", "danger")
-                return render_template("test_making.html", user=user, test_form=test_form, question_form=question_form, option_form=option_form)
+                return render_template("test_making.html", user=user, test_form=test_form)
             if not category.isalnum():
                 flash("Category must be alphanumeric.", "danger")
-                return render_template("test_making.html", user=user, test_form=test_form, question_form=question_form, option_form=option_form)
+                return render_template("test_making.html", user=user, test_form=test_form)
             
             new_category = TestCategory(test_id=new_test.id, name=category)
             try:
@@ -182,47 +181,47 @@ def test_making():
             
         logger.info("Categories: %s", categories)
 
-        new_question = Question(
-            test_id=new_test.id,
-            question=question_form.question.data,
-            type=question_form.type.data,
-            marks=question_form.marks.data
-        )
-        logger.info("new_question: %s", new_question.to_dict())
+        # new_question = Question(
+        #     test_id=new_test.id,
+        #     question=question_form.question.data,
+        #     type=question_form.type.data,
+        #     marks=question_form.marks.data
+        # )
+        # logger.info("new_question: %s", new_question.to_dict())
 
-        try:
-            insert_in_db(new_question)
-        except Exception as e:
-            flash(f"An error occurred while creating the question: {str(e)}", "danger")
-            return redirect(url_for("test_making"))
+        # try:
+        #     insert_in_db(new_question)
+        # except Exception as e:
+        #     flash(f"An error occurred while creating the question: {str(e)}", "danger")
+        #     return redirect(url_for("test_making"))
 
-        options = request.form.getlist('option')
-        is_corrects = request.form.getlist('is_correct')
+        # options = request.form.getlist('option')
+        # is_corrects = request.form.getlist('is_correct')
 
-        # Combine options and their corresponding is_correct values
-        combined = list(zip(options, is_corrects))
+        # # Combine options and their corresponding is_correct values
+        # combined = list(zip(options, is_corrects))
 
-        # Retrieve all options
-        for option_text, is_correct_val in combined:
-            new_option = Option(
-                question_id=new_question.id,
-                test_id=new_test.id,
-                option=option_text,
-                is_correct=True if is_correct_val == 'y' else False
-            )
-            logger.info("new_option: %s", new_option.to_dict())
+        # # Retrieve all options
+        # for option_text, is_correct_val in combined:
+        #     new_option = Option(
+        #         question_id=new_question.id,
+        #         test_id=new_test.id,
+        #         option=option_text,
+        #         is_correct=True if is_correct_val == 'y' else False
+        #     )
+        #     logger.info("new_option: %s", new_option.to_dict())
 
-            try:
-                insert_in_db(new_option)
-            except Exception as e:
-                flash(f"An error occurred while creating the option: {str(e)}", "danger")
-                return redirect(url_for("test_making"))
+        #     try:
+        #         insert_in_db(new_option)
+        #     except Exception as e:
+        #         flash(f"An error occurred while creating the option: {str(e)}", "danger")
+        #         return redirect(url_for("test_making"))
 
         flash("Test has been successfully created!", "success")
         return redirect(url_for("test_making"))
 
     else:
-        return render_template("test_making.html", user=user, test_form=test_form, question_form=question_form, option_form=option_form)
+        return render_template("test_making.html", user=user, test_form=test_form)
 
 @app.route("/tests", methods=["GET"])
 @login_required
