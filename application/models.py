@@ -62,7 +62,7 @@ class Test(db.Model):
     instructions = db.Column(db.Text)
     type = db.Column(db.String(255))
     num_of_questions = db.Column(db.SmallInteger, nullable=False, server_default="0") # server_default="0" is not working.
-    total_marks = db.Column(db.SmallInteger, nullable=False)
+    total_marks = db.Column(db.SmallInteger, nullable=False, server_default="0") # server_default="0" is not working.
     expiry_date = db.Column(db.DateTime)
     multiple_sections = db.Column(db.Boolean, default=False) # Default not showing in the quick decomintation in DataGrip but works!
     one_section_per_page = db.Column(db.Boolean, default=False) # Default not showing in the quick decomintation in DataGrip but works!

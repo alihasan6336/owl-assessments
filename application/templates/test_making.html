@@ -110,19 +110,7 @@
                         <option value="category2">A2 Prep</option>
                     </select>
                 </div>
-
-                <!-- Total Marks -->
-                <div class="form-group">
-                    {{ test_form.total_marks.label(class="form-label") }}
-                    {{ test_form.total_marks(class="form-control") }}
-                    {% if test_form.total_marks.errors %}
-                        <div class="text-danger">
-                            {% for error in test_form.total_marks.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
+                
                 <!-- Expiry Date -->
                 <div class="form-group">
                     {{ test_form.expiry_date.label(class="form-label") }}

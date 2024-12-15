@@ -137,7 +137,6 @@ def test_making():
             description=test_form.description.data,
             instructions=test_form.instructions.data,
             type=test_form.ctype.data,
-            total_marks=test_form.total_marks.data,
             expiry_date=test_form.expiry_date.data,
             multiple_sections=test_form.multiple_sections.data,
             one_section_per_page=test_form.one_section_per_page.data,
