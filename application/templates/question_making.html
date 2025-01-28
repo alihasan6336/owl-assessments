@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Question</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>
+    <link type="text/css" href="{{ url_for('static', filename='css/question-making.css') }}" rel="stylesheet"></head>
+<body>
+
+    {% include 'includes/left_side_bar.html' %}
+
+    <!-- Main Content -->
+    <div class="content">
+        <h1>Create a New Question</h1>
+        {% with alerts = get_flashed_messages(with_categories=true) %}
+            {% if alerts %}
+                {% for category, message in alerts %}
+                <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="container mt-5">
+            <form method="POST" action="">
+                {{ question_form.hidden_tag() }}
+                <div class="form-group">
+                    {{ question_form.question.label(class="form-label") }}
+                    {{ question_form.question(class="form-control") }}
+                    {% if question_form.question.errors %}
+                        <div class="text-danger">
+                            {% for error in question_form.question.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ question_form.marks.label(class="form-label") }}
+                    {{ question_form.marks(class="form-control custom-input") }}
+                    {% if question_form.marks.errors %}
+                        <div class="text-danger">
+                            {% for error in question_form.marks.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ question_form.type.label(class="form-label") }}
+                    {{ question_form.type(class="form-control", id="question-type") }}
+                    {% if question_form.type.errors %}
+                        <div class="text-danger">
+                            {% for error in question_form.type.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div id="mcq-section" style="display: none;">
+                    <div id="mcq-options">
+                        <div class="form-group" id="option-template-1">
+                            <label for="option-1">Option 1</label>
+                            <textarea id="option-1" name="option_name-opt1" class="form-control" required></textarea>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="is_correct" value="opt1" id="is_correct-1">
+                                <label class="form-check-label" for="is_correct-1">
+                                    Correct Answer
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-custom-s mt-2" onclick="addOption()">Add Option</button>
+                    <button type="button" class="btn btn-custom-d mt-2" onclick="removeOption()">Remove Option</button>
+                </div>
+                <button type="submit" class="btn btn-primary m-2">Create Question</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="{{ url_for('static', filename='js/test-making.js') }}" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const questionTypeSelect = document.getElementById("question-type");
+            if (questionTypeSelect) {
+                questionTypeSelect.addEventListener('change', toggleQuestionType);
+            }
+            toggleQuestionType();
+        });
+        
+        function toggleQuestionType() {
+            const questionType = document.getElementById("question-type").value;
+            const mcqSection = document.getElementById("mcq-section");
+        
+            const mcqInputs = mcqSection.querySelectorAll('textarea');
+        
+            if (questionType === "mcq") {
+                mcqSection.style.display = "block";
+                mcqInputs.forEach(input => {
+                    input.setAttribute('required', 'true');
+                });
+            } else {
+                mcqSection.style.display = "none";
+                mcqInputs.forEach(input => {
+                    input.removeAttribute('required');
+                });
+            }
+        }
+        
+        let optionCount = 1;
+        
+        function addOption() {
+            optionCount++;
+            const mcqOptions = document.getElementById("mcq-options");
+        
+            const newOptionDiv = document.getElementById('option-template-1').cloneNode(true);
+            newOptionDiv.id = `option-template-${optionCount}`;
+            newOptionDiv.querySelector('label').innerText = `Option ${optionCount}`;
+            newOptionDiv.querySelector('label').setAttribute('for', `option-${optionCount}`);
+        
+            newOptionDiv.querySelector('textarea').setAttribute('id', `option-${optionCount}`);
+            newOptionDiv.querySelector('textarea').setAttribute('name', `option_name-opt${optionCount}`);
+            newOptionDiv.querySelector('textarea').value = '';
+            newOptionDiv.querySelector('.form-check-input').setAttribute('id', `is_correct-${optionCount}`);
+            newOptionDiv.querySelector('.form-check-input').checked = false;
+            newOptionDiv.querySelector('.form-check-input').setAttribute('value', `opt${optionCount}`);
+            newOptionDiv.querySelector('.form-check-label').setAttribute('for', `is_correct-${optionCount}`);
+            
+        
+            mcqOptions.appendChild(newOptionDiv);
+        }
+        
+        function removeOption() {
+            if (optionCount > 1) {
+                const mcqOptions = document.getElementById("mcq-options");
+                mcqOptions.removeChild(mcqOptions.lastElementChild);
+                optionCount--;
+            } else {
+                alert('At least 1 option is required.');
+            }
+        }
+    </script>
+</body>
+</html>

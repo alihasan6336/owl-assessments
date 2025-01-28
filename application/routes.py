@@ -2,8 +2,8 @@ from flask import render_template, request, flash, redirect, url_for, session, j
 from werkzeug.security import generate_password_hash
 from flask_login import login_user, login_required, logout_user
 from application import app, db, login_manager
-from application.models import Company, Test, TestCategory
-from application.forms import RegisterForm, LoginForm, TestForm
+from application.models import Company, Test, TestCategory, Question, Option
+from application.forms import RegisterForm, LoginForm, TestForm, QuestionForm, OptionForm
 from application.db_operations import insert_in_db, get_all_companies
 from sqlalchemy import text
 import logging
@@ -19,7 +19,7 @@ def load_user(user_id):
 def handle_exception(e):
     response = {
         "error": str(e),
-        "message": "An unexpected error occurred. Please try again later."
+        "message": e.__doc__
     }
     return jsonify(response), 500
 
@@ -229,6 +229,99 @@ def list_tests():
     tests = Test.query.filter_by(company_id=user.id).all()
     return render_template("list_tests.html", user=user, tests=tests)
 
+@app.route("/tests-bank", methods=["GET"])
+@login_required
+def tests_bank():
+    user = get_current_user()
+    tests = Test.query.filter_by(company_id=user.id).all()
+    return render_template("tests_bank.html", user=user, tests=tests)
+
+
+@app.route("/<int:test_id>/add-question", methods=["GET", "POST"])
+@login_required
+def add_question(test_id):
+    user = get_current_user()
+    test = Test.query.get_or_404(test_id)
+
+    if test.company_id != user.id:
+        flash("You do not have permission to add questions to this test.", "danger")
+        return redirect(url_for("home"))
+
+    question_form = QuestionForm()
+    option_form = OptionForm()
+
+    if request.method == "POST":
+        if not question_form.validate_on_submit():
+            print(question_form.errors)
+            return render_template("question_making.html", user=user, test=test, question_form=question_form, option_form=option_form)
+
+        new_question = Question(
+            test_id=test.id,
+            question=question_form.question.data,
+            type=question_form.type.data,
+            marks=question_form.marks.data
+        )
+        try:
+            insert_in_db(new_question)
+
+            test.num_of_questions += 1
+            db.session.commit()
+
+            if not test.active and test.num_of_questions > 0:
+                test.active = True
+                db.session.commit()
+
+        except Exception as e:
+            flash(f"An error occurred while creating the question: {str(e)}", "danger")
+            return redirect(url_for("add_question", test_id=test.id))
+        
+
+        options = []
+        for key in request.form:
+            if key.startswith('option_name') and request.form[key] != "":
+                id_ = key.partition('-')[-1]
+                value = request.form[key]
+                options.append((id_, value))
+
+        is_corrects = request.form.getlist('is_correct')
+
+        print(options)
+        print(is_corrects)
+
+        for option in options:
+            new_option = Option(
+                question_id=new_question.id,
+                test_id=test.id,
+                option=option[1],
+                is_correct=True if option[0] in is_corrects else False
+            )
+            try:
+                insert_in_db(new_option)
+            except Exception as e:
+                flash(f"An error occurred while creating the option: {str(e)}", "danger")
+                return redirect(url_for("add_question", test_id=test.id))
+
+        flash("Question has been successfully added!", "success")
+        return redirect(url_for("add_question", test_id=test.id))
+
+    return render_template("question_making.html", user=user, test=test, question_form=question_form, option_form=option_form)
+
+
+@app.route("/<int:test_id>/questions", methods=["GET"])
+@login_required
+def view_questions(test_id):
+    user = get_current_user()
+    test = Test.query.get_or_404(test_id)
+
+    if test.company_id != user.id:
+        flash("You do not have permission to view questions of this test.", "danger")
+        return redirect(url_for("home"))
+
+    questions = Question.query.filter_by(test_id=test.id).all()
+    options = Option.query.filter_by(test_id=test.id).all()
+    print(options)
+    return render_template("view_questions.html", user=user, test=test, questions=questions, options=options)
+
 
 @app.route("/test-db-connection")
 def test_db_connection():
@@ -239,3 +332,6 @@ def test_db_connection():
     except Exception as e:
         logger.error(f"Database connection failed: {str(e)}")
         return f"Database connection failed: {str(e)}", 500
+    
+
+ # <a href="{{ url_for('modify_test', test_id=test.id) }}" class="btn btn-secondary btn-sm mb-2">

@@ -57,14 +57,14 @@ class TestForm(FlaskForm):
     submit = SubmitField('Create Test')
 
 
-# class QuestionForm(FlaskForm):
-#     question = TextAreaField('Question', validators=[DataRequired(), Length(max=255)])
-#     type = SelectField('Question Type', choices=question_types, validators=[DataRequired()])
-#     marks = IntegerField('Marks', validators=[DataRequired(), NumberRange(min=1, max=1000)])
-#     submit = SubmitField('Add Question')
+class QuestionForm(FlaskForm):
+    question = TextAreaField('Question', validators=[DataRequired(), Length(max=255)])
+    type = SelectField('Question Type', choices=question_types, validators=[DataRequired()])
+    marks = IntegerField('Marks', validators=[DataRequired(), NumberRange(min=1, max=1000)])
+    submit = SubmitField('Add Question')
 
 
-# class OptionForm(FlaskForm):
-#     option = TextAreaField('Option 1', validators=[Length(max=255)]) #add required
-#     is_correct = SelectField('Is Correct', choices=[('y', 'Yes'), ('n', 'No')]) # can this be changed by the user? needs DataRequired?
-#     submit = SubmitField('Add Option')
+class OptionForm(FlaskForm):
+    option = TextAreaField('Option 1', validators=[Length(max=255)]) #add required
+    is_correct = SelectField('Is Correct', choices=[('y', 'Yes'), ('n', 'No')]) # can this be changed by the user? needs DataRequired?
+    submit = SubmitField('Add Option')

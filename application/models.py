@@ -67,7 +67,7 @@ class Test(db.Model):
     multiple_sections = db.Column(db.Boolean, default=False) # Default not showing in the quick decomintation in DataGrip but works!
     one_section_per_page = db.Column(db.Boolean, default=False) # Default not showing in the quick decomintation in DataGrip but works!
     correction_type = db.Column(db.String(10), server_default='a') # server_default='a' is not working.
-    active = db.Column(db.Boolean, default=True) # Default not showing in the quick decomintation in DataGrip but works!
+    active = db.Column(db.Boolean, default=False) # Default not showing in the quick decomintation in DataGrip but works!
     creation_date = db.Column(db.DateTime, default=datetime.utcnow) # Test the datetime formate. # Default not showing in the quick decomintation in DataGrip but works!
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) # Test the datetime formate. # Default not showing in the quick decomintation in DataGrip but works! # On update working?
 

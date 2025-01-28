@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Questions</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.css" rel="stylesheet"/>
+    <link type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+    <link type="text/css" href="{{ url_for('static', filename='css/edit-questions.css') }}" rel="stylesheet">
+    <style>
+        .options-row {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'includes/left_side_bar.html' %}
+
+    <!-- Main Content -->
+    <div class="content">
+        <h1>All Questions</h1>
+        <a href="/{{ test.id }}/add-question" class="btn btn-success mb-2">Add New Question</a>
+
+        {% with alerts = get_flashed_messages(with_categories=true) %}
+            {% if alerts %}
+                {% for category, message in alerts %}
+                <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="container mt-5">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Marks</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for question in questions %}
+                    <tr>
+                        <td>{{ question.question }}</td>
+                        <td>{{ question.marks }}</td>
+                        <td>
+                            {% if question.type == 'mcq' %}
+                                <a href="javascript:void(0);" onclick="toggleOptions({{ question.id }})">{{ question.type }}</a>
+                            {% else %}
+                                {{ question.type }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr id="options-row-{{ question.id }}" class="options-row">
+                        <td colspan="3">
+                            <ul>
+                                {% for option in options if option.question_id == question.id %}
+                                <li>Option: {{ option.option }} - {% if option.is_correct %}Correct{% else %}Incorrect{% endif %}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        function toggleOptions(questionId) {
+            const optionsRow = document.getElementById(`options-row-${questionId}`);
+            if (optionsRow.style.display === 'none' || optionsRow.style.display === '') {
+                optionsRow.style.display = 'table-row';
+            } else {
+                optionsRow.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
